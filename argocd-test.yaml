@@ -1,0 +1,19 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  # namespace: jenkins
+spec:
+  destination:
+    # name: ''
+    namespace: jenkins
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts/jenkins
+    repoURL: 'https://github.com/mjhfvi/HelmfileExamples'
+    targetRevision: HEAD
+  # sources: []
+  project: default
+
+# argocd app create jenkins -f argocd-test.yaml
