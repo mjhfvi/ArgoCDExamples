@@ -968,10 +968,10 @@ agent:
   # Configure the attributes as they appear in the corresponding Java class for that type
   # https://github.com/jenkinsci/kubernetes-plugin/tree/master/src/main/java/org/csanchez/jenkins/plugins/kubernetes/volumes
   # -- Additional volumes
-  volumes: []
-  # - type: ConfigMap
-  #   configMapName: myconfigmap
-  #   mountPath: /var/myapp/myconfigmap
+  volumes:
+    - type: ConfigMap
+      configMapName: github-ssh-login-key
+      mountPath: /etc/ssh/github_ssh_login_key_ed25519
   # - type: EmptyDir
   #   mountPath: /var/myapp/myemptydir
   #   memory: false

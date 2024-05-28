@@ -2,9 +2,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jenkins
+  name: kubernetes-dashboard
   # You'll usually want to add your resources to the argocd namespace.
-  # namespace: jenkins
+  # namespace: kubernetes-dashboard
   # Add this finalizer ONLY if you want these to cascade delete.
   finalizers:
     # The default behaviour is foreground cascading deletion
@@ -13,7 +13,7 @@ metadata:
     # - resources-finalizer.argocd.argoproj.io/background
   # Add labels to your application object.
   labels:
-    name: jenkins
+    name: kubernetes-dashboard
 spec:
   # The project the application belongs to.
   project: default
@@ -22,7 +22,7 @@ spec:
   source:
     repoURL: https://github.com/mjhfvi/HelmfileExamples.git  # Can point to either a Helm chart repo or a git repo.
     targetRevision: HEAD  # For Helm, this refers to the chart version.
-    path: charts/jenkins  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
+    path: charts/kubernetes-dashboard  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
 
     # helm specific config
     chart: values.yaml  # Set this when pulling directly from a Helm repo. DO NOT set for git-hosted Helm charts.
@@ -30,24 +30,24 @@ spec:
       passCredentials: false # If true then adds --pass-credentials to Helm commands to pass credentials to all domains
       # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
-      - name: "nginx-ingress.controller.service.annotations.external-dns\\.alpha\\.kubernetes\\.io/hostname"
-        value: mydomain.example.com
-      - name: "ingress.annotations.kubernetes\\.io/tls-acme"
-        value: "true"
-        forceString: true # ensures that value is treated as a string
+        - name: "nginx-ingress.controller.service.annotations.external-dns\\.alpha\\.kubernetes\\.io/hostname"
+          value: mydomain.example.com
+        - name: "ingress.annotations.kubernetes\\.io/tls-acme"
+          value: "true"
+          forceString: true # ensures that value is treated as a string
 
       # Use the contents of files as parameters (uses Helm's --set-file)
       fileParameters:
-      - name: config
-        path: files/config.json
+        - name: config
+          path: files/config.json
 
       # Release name override (defaults to application name)
-      releaseName: jenkins
+      releaseName: kubernetes-dashboard
 
       # Helm values files for overriding values in the helm chart
       # The path is relative to the spec.source.path directory defined above
       valueFiles:
-        - values-jenkins.yaml
+        - values-kubernetes-dashboard.yaml
 
       # Ignore locally missing valueFiles when installing Helm chart. Defaults to false
       ignoreMissingValueFiles: false
@@ -161,8 +161,8 @@ spec:
   sources:
     - repoURL: https://github.com/mjhfvi/HelmfileExamples.git  # Can point to either a Helm chart repo or a git repo.
       targetRevision: HEAD  # For Helm, this refers to the chart version.
-      path: charts/jenkins  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
-      ref: values-jenkins  # For Helm, acts as a reference to this source for fetching values files from this source. Has no meaning when under `source` field
+      path: charts/kubernetes-dashboard  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
+      ref: values-kubernetes-dashboard  # For Helm, acts as a reference to this source for fetching values files from this source. Has no meaning when under `source` field
 
   # Destination cluster and namespace to deploy the application
   destination:
@@ -171,7 +171,7 @@ spec:
     # or cluster name
     # name: in-cluster
     # The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
-    namespace: jenkins
+    namespace: kubernetes-dashboard
 
   # Extra information to show in the Argo CD Application details tab
   info:
@@ -234,6 +234,7 @@ spec:
   # space used to store the history, so we do not recommend increasing it.
   revisionHistoryLimit: 10
 
-## argocd app create jenkins -f argocd-jenkins.yaml --values values-jenkins.yaml ## FILE IN REPO
-## argocd app create jenkins -f argocd-jenkins.yaml --values-literal-file values-jenkins.yaml
-## argocd app delete jenkins
+## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml
+## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml --values values-kubernetes-dashboard.yaml ## FILE IN REPO
+## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml --values-literal-file values-kubernetes-dashboard.yaml ## LOCAL FILE
+## argocd app delete kubernetes-dashboard
