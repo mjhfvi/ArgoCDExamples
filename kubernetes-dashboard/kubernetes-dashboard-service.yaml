@@ -2,31 +2,52 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app.kubernetes.io/name: kubernetes-dashboard-web-service
-  name: kubernetes-dashboard-web-service
+  name: kubernetes-dashboard-service
   namespace: kubernetes-dashboard
 spec:
   type: LoadBalancer
   ports:
-    - port: 8082
+    - port: 8443
       protocol: TCP
-      targetPort: 8000
+      targetPort: 8002
   selector:
-    app.kubernetes.io/name: kubernetes-dashboard-web
+    k8s-app: kubernetes-dashboard-kong-manager
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: dashboard-metrics-scraper
+#   namespace: kubernetes-dashboard
+# spec:
+#   type: LoadBalancer
+#   ports:
+#     - port: 8000
+#       protocol: TCP
+#       targetPort: 8000
+#   selector:
+#     k8s-app: dashboard-metrics-scraper
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  labels:
-    app.kubernetes.io/name: dashboard-metrics-scraper-service
-  name: kubernetes-dashboard-metrics-scraper-service
+  name: kubernetes-dashboard-ingress
   namespace: kubernetes-dashboard
+  # annotations:
+    # redirect to https while access by http
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # HTTPS transfer，(because ingress use HTTP by default)
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 8000
-      protocol: TCP
-      targetPort: 8000
-  selector:
-    app.kubernetes.io/name: kubernetes-dashboard-metrics-scraper
+  rules:
+  - host: dashboard.localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: kubernetes-dashboard-service
+            port:
+              number: 8000
+  ingressClassName: nginx

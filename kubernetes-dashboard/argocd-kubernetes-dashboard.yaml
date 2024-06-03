@@ -233,8 +233,3 @@ spec:
   # circumstances. Setting to zero will store no history. This will reduce storage used. Increasing will increase the
   # space used to store the history, so we do not recommend increasing it.
   revisionHistoryLimit: 10
-
-## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml
-## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml --values values-kubernetes-dashboard.yaml ## FILE IN REPO
-## argocd app create kubernetes-dashboard -f argocd-kubernetes-dashboard.yaml --values-literal-file values-kubernetes-dashboard.yaml ## LOCAL FILE
-## argocd app delete kubernetes-dashboard

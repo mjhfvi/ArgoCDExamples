@@ -1185,7 +1185,7 @@ persistence:
   # Requires persistence.enabled: true
   # If defined, PVC must be created manually before volume will be bound
   # -- Provide the name of a PVC
-  existingClaim: "jenkins-persistent-volume-claim"
+  existingClaim: "jenkins-persistent-volume-claim"  # jenkins-persistent-volume-claim
 
   # jenkins data Persistent Volume Storage Class
   # If defined, storageClassName: <storageClass>

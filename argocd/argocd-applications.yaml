@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-applications
+  namespace: argo-cd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  sources:
+    - repoURL: 'https://argoproj.github.io/argo-helm'
+      path: manifests
+      chart: argocd-apps
+      targetRevision: 2.0.0   # HEAD 2.0.0
+      helm:
+        valueFiles:
+          - values.yaml
+    - repoURL: 'https://argoproj.github.io/argo-helm'
+      path: manifests
+      chart: argocd-image-updater
+      targetRevision: 0.10.1    # HEAD
+      helm:
+        valueFiles:
+          - values.yaml
+
+## argocd config file multiple apps
+# run command
+# argocd app create argocd-applications -f argocd-applications.yaml

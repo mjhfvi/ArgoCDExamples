@@ -7,3 +7,7 @@ values-jenkins.yaml
 
 # run command
 argocd app create jenkins -f argocd-jenkins.yaml --values values-jenkins.yaml
+
+
+## Remove
+argocd app delete jenkins
