@@ -20,10 +20,10 @@ kubectl port-forward $(kubectl -n traefik get pods --selector "app.kubernetes.io
 argocd app delete traefik
 
 
-## argocd app create traefik -f argocd-traefik.yaml
-## argocd app create traefik -f argocd-traefik.yaml --values values-traefik.yaml ## FILE IN REPO
-## argocd app create traefik -f argocd-traefik.yaml --values-literal-file values-traefik.yaml ## LOCAL FILE
-## argocd app delete traefik
+argocd app create traefik -f argocd-traefik.yaml
+argocd app create traefik -f argocd-traefik.yaml --values values-traefik.yaml ## FILE IN REPO
+argocd app create traefik -f argocd-traefik.yaml --values-literal-file values-traefik.yaml ## LOCAL FILE
+argocd app delete traefik
 
 
 

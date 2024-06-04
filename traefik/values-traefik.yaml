@@ -587,7 +587,7 @@ ports:
     # containerPort: 8000
     expose:
       default: true
-    exposedPort: 8083
+    exposedPort: 80
     ## -- Different target traefik port on the cluster, useful for IP type LB
     # targetPort: 80
     # The port protocol (TCP/UDP)
@@ -728,7 +728,7 @@ service:
   ## -- Single service is using `MixedProtocolLBService` feature gate.
   ## -- When set to false, it will create two Service, one for TCP and one for UDP.
   single: true
-  type: LoadBalancer   # ClusterIP, LoadBalancer
+  type: LoadBalancer
   # -- Additional annotations applied to both TCP and UDP services (e.g. for cloud provider specific config)
   annotations: {}
   # -- Additional annotations for TCP service only
