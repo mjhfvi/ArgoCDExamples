@@ -109,7 +109,7 @@ rules:
 {{- if .Values.providerRBAC.providers.gatewayAPI }}
   - create
   - update
-{{- end }}  
+{{- end }}
 # pod list/update needed for updating ephemeral data
 - apiGroups:
   - ""

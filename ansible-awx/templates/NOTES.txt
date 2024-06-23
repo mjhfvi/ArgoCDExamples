@@ -4,4 +4,3 @@
   http{{ if $.Values.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.ingress.path }}
 {{- end }}
 {{- end }}
-

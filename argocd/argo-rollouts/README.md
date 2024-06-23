@@ -47,7 +47,7 @@ For full list of changes please check ArtifactHub [changelog].
 | clusterInstall | bool | `true` | `false` runs controller in namespaced mode (does not require cluster RBAC) |
 | crdAnnotations | object | `{}` | Annotations to be added to all CRDs |
 | createClusterAggregateRoles | bool | `true` | flag to enable creation of cluster aggregate roles (requires cluster RBAC) |
-| extraObjects | list | `[]` | Additional manifests to deploy within the chart. A list of objects. |
+| extraObjects | list | `[]` | Additional manifests to deploy within the chart. A list of objects. # Can be used to add secrets for Analysis with 3rd-party monitoring solutions. |
 | fullnameOverride | string | `nil` | String to fully override "argo-rollouts.fullname" template |
 | global.deploymentAnnotations | object | `{}` | Annotations for all deployed Deployments |
 | global.deploymentLabels | object | `{}` | Labels for all deployed Deployments |
@@ -87,18 +87,18 @@ For full list of changes please check ArtifactHub [changelog].
 | controller.deploymentAnnotations | object | `{}` | Annotations to be added to the controller deployment |
 | controller.deploymentLabels | object | `{}` | Labels to be added to the controller deployment |
 | controller.extraArgs | list | `[]` | Additional command line arguments to pass to rollouts-controller.  A list of flags. |
-| controller.extraContainers | list | `[]` | Literal yaml for extra containers to be added to controller deployment. |
+| controller.extraContainers | list | `[]` | Literal yaml for extra containers to be added to controller deployment. # Additional containers to add to the rollouts controller deployment # This will be rendered as the literal yaml |
 | controller.extraEnv | list | `[]` | Additional environment variables for rollouts-controller. A list of name/value maps. |
 | controller.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | controller.image.registry | string | `"quay.io"` | Registry to use |
 | controller.image.repository | string | `"argoproj/argo-rollouts"` | Repository to use |
 | controller.image.tag | string | `""` | Overrides the image tag (default is the chart appVersion) |
-| controller.initContainers | list | `[]` | Init containers to add to the rollouts controller pod |
+| controller.initContainers | list | `[]` | Init containers to add to the rollouts controller pod # This will be rendered as the literal yaml |
 | controller.livenessProbe | object | See [values.yaml] | Configure liveness [probe] for the controller |
 | controller.logging.format | string | `"text"` | Set the logging format (one of: `text`, `json`) |
 | controller.logging.kloglevel | string | `"0"` | Set the klog logging level |
 | controller.logging.level | string | `"info"` | Set the logging level (one of: `debug`, `info`, `warn`, `error`) |
-| controller.metricProviderPlugins | object | `{}` | Configures 3rd party metric providers for controller |
+| controller.metricProviderPlugins | object | `{}` | Configures 3rd party metric providers for controller # Ref: https://argo-rollouts.readthedocs.io/en/stable/analysis/plugins/ |
 | controller.metrics.enabled | bool | `false` | Deploy metrics service |
 | controller.metrics.service.annotations | object | `{}` | Service annotations |
 | controller.metrics.service.port | int | `8090` | Metrics service port |
@@ -122,8 +122,8 @@ For full list of changes please check ArtifactHub [changelog].
 | controller.replicas | int | `2` | The number of controller pods to run |
 | controller.resources | object | `{}` | Resource limits and requests for the controller pods. |
 | controller.tolerations | list | `[]` | [Tolerations] for use with node taints |
-| controller.topologySpreadConstraints | list | `[]` | Assign custom [TopologySpreadConstraints] rules to the controller |
-| controller.trafficRouterPlugins | object | `{}` | Configures 3rd party traffic router plugins for controller |
+| controller.topologySpreadConstraints | list | `[]` | Assign custom [TopologySpreadConstraints] rules to the controller # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ # If labelSelector is left out, it will default to the labelSelector configuration of the deployment |
+| controller.trafficRouterPlugins | object | `{}` | Configures 3rd party traffic router plugins for controller # Ref: https://argo-rollouts.readthedocs.io/en/stable/features/traffic-management/plugins/ |
 | controller.volumeMounts | list | `[]` | Additional volumeMounts to add to the controller container |
 | controller.volumes | list | `[]` | Additional volumes to add to the controller pod |
 | podAnnotations | object | `{}` | Annotations for the all deployed pods |
@@ -154,7 +154,7 @@ For full list of changes please check ArtifactHub [changelog].
 | dashboard.ingress.annotations | object | `{}` | Dashboard ingress annotations |
 | dashboard.ingress.enabled | bool | `false` | Enable dashboard ingress support |
 | dashboard.ingress.extraPaths | list | `[]` | Dashboard ingress extra paths |
-| dashboard.ingress.hosts | list | `[]` | Dashboard ingress hosts |
+| dashboard.ingress.hosts | list | `[]` | Dashboard ingress hosts # Argo Rollouts Dashboard Ingress. # Hostnames must be provided if Ingress is enabled. # Secrets must be manually created in the namespace |
 | dashboard.ingress.ingressClassName | string | `""` | Dashboard ingress class name |
 | dashboard.ingress.labels | object | `{}` | Dashboard ingress labels |
 | dashboard.ingress.pathType | string | `"Prefix"` | Dashboard ingress path type |
@@ -189,7 +189,7 @@ For full list of changes please check ArtifactHub [changelog].
 | dashboard.serviceAccount.create | bool | `true` | Specifies whether a dashboard service account should be created |
 | dashboard.serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
 | dashboard.tolerations | list | `[]` | [Tolerations] for use with node taints |
-| dashboard.topologySpreadConstraints | list | `[]` | Assign custom [TopologySpreadConstraints] rules to the dashboard server |
+| dashboard.topologySpreadConstraints | list | `[]` | Assign custom [TopologySpreadConstraints] rules to the dashboard server # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ # If labelSelector is left out, it will default to the labelSelector configuration of the deployment |
 | dashboard.volumeMounts | list | `[]` | Additional volumeMounts to add to the dashboard container |
 | dashboard.volumes | list | `[]` | Additional volumes to add to the dashboard pod |
 
@@ -203,10 +203,10 @@ For full list of changes please check ArtifactHub [changelog].
 
 ### To 1.0.0
 
-* This is a breaking change which only supports Helm v3.0.0+ now. If you still use Helm v2, please consider upgrading because v2 is EOL since November 2020.  
+* This is a breaking change which only supports Helm v3.0.0+ now. If you still use Helm v2, please consider upgrading because v2 is EOL since November 2020.
   To migrate to Helm v3 please have a look at the [Helm 2to3 Plugin](https://github.com/helm/helm-2to3). This tool will convert the existing ConfigMap used for Tiller to a Secret of type `helm.sh/release.v1`.
 * `quay.io` is the default registry now
-* We introduce a template function for the labels here to reduce code duplication. This also affects the Deployment `matchLabels` selector.  
+* We introduce a template function for the labels here to reduce code duplication. This also affects the Deployment `matchLabels` selector.
   To upgrade an existing installation, please **add the `--force` parameter** to the `helm upgrade` command or **delete the Deployment resource** before you upgrade. This is necessary because Deployment's label selector is immutable.
 * All resources are now prefixed with the template `"argo-rollouts.fullname"`.
   This enables the users to override resource names via the `nameOverride` and `fullnameOverride` parameters.

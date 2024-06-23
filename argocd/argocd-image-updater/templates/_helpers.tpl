@@ -25,7 +25,7 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
-Override .Release.Namespace 
+Override .Release.Namespace
 */}}
 {{- define "argocd-image-updater.namespace" -}}
 {{- default .Release.Namespace .Values.namespaceOverride }}

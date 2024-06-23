@@ -1,119 +1,81 @@
-## build ansible-awx with arcgcd
-# argocd config file for ansible-awx
-# argocd-ansible-awx.yaml
+# awx
 
-# ansible-awx value file
-# values-ansible-awx.yaml
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 6.1.0](https://img.shields.io/badge/AppVersion-6.1.0-informational?style=flat-square)
 
-# run command
-# argocd app create ansible-awx -f argocd-ansible-awx.yaml --values values-ansible-awx.yaml
+Installs Ansible AWX (Ansible Web UI), with dependencies (rabbitmq, postgresql, memcahed)
 
+## Maintainers
 
-## Remove
-# argocd app delete ansible-awx
+| Name | Email | Url |
+| ---- | ------ | --- |
+| kim0 | <email.ahmedkamal@googlemail.com> |  |
 
-## argocd app create ansible-awx -f argocd-ansible-awx.yaml --values-literal-file values-ansible-awx.yaml ## LOCAL FILE
-## argocd app create ansible-awx -f argocd-ansible-awx.yaml --values values-ansible-awx.yaml ## FILE IN REPO
-## argocd app delete ansible-awx
+## Source Code
 
+* <https://github.com/ansible/awx>
 
-# Ansible AWX
+## Requirements
 
-Helm deployement of Ansible AWX on Kubernetes
+| Repository | Name | Version |
+|------------|------|---------|
+| https://kubernetes-charts.storage.googleapis.com/ | memcached | 2.9.0 |
+| https://kubernetes-charts.storage.googleapis.com/ | postgresql | 6.2.0 |
+| https://kubernetes-charts.storage.googleapis.com/ | rabbitmq | 6.2.6 |
 
-## Introduction
+## Values
 
-This chart bootstraps an [AWX](https://github.com/ansible/awx) deployment on
-a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh)
-package manager.
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-helm repo add rfy-awx https://raw.githubusercontent.com/rfyio/ansible-awx-helm-chart/master/
-helm repo update
-helm install --name my-release rfy-awx/awx
-```
-
-To install the development version:
-
-```console
-helm dep up ./awx
-helm install --name my-release ./awx
-```
-
-The command deploys AWX on the Kubernetes cluster in the default configuration.
-The [configuration](#configuration) section lists the parameters that can be configured
-during installation.
-
-This charts embeds chart dependencies specified in the requirements.yaml file:
-
-- postgresql
-- memcached
-- rabbitmq
-
-**Note**: Currently, this chart is not ready to be used with external postgresql,
-memcached or rabbitmq. PR welcomed.
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart
-and deletes the release.
-
-## Configuration
-
-The following table lists the configurable parameters of the
-awx chart and their default values.
-Postgresql, memcached, rabbitmq charts values can be overridden in
-awx/values.yaml
-
-Parameter | Description | Default
---------- | ----------- | -------
-`replicaCount` | Pod replica count | `1`
-`awx_web.image.repository` |  | `ansible/awx_web`
-`awx_web.image.tag` |  | `2.1.2`
-`awx_web.image.pullPolicy` |  | `IfNotPresent`
-`awx_task.image.repository` |  | `ansible/awx_task`
-`awx_task.image.tag` |  | `2.1.2`
-`awx_task.image.pullPolicy` |  | `IfNotPresent`
-`awx_secret_key` |  | `awxsecret`
-`default_admin_user` |  | `admin`
-`default_admin_password` |  | `password`
-`deployment.annotations` |  | `{}`
-`service.internalPort` |  | `8052`
-`service.externalPort` |  | `8052`
-`ingress.enabled` |  | `false`
-`memcached.install` | Install memcached chart | `true`
-`rabbitmq.install` | Install rabbitmq chart | `true`
-`rabbitmq.rabbitmq.username` | Rabbitmq username | `awx`
-`rabbitmq.rabbitmq.password` | Rabbitmq password| `awx`
-`rabbitmq.rabbitmq.configuration` | Rabbitmq configuration file| cf values.yaml
-`postgresql.install` | Install postgresql chart | `true`
-`postgresql.postgresqlUsername` | postgresql username | `postgres`
-`postgresql.postgresqlPassword` | postgresql password | `awx`
-`postgresql.postgresqlDatabase` | postgresql database | `awx`
-`postgresql.persistence.enabled` | postgresql persistence | `true`
-`metrics.enabled` | Start a side-car prometheus exporter | `false`
-`metrics.image.registry` | Exporter image registry | `docker.io`
-`metrics.image.repository` | Exporter image name | `bitnami/rabbitmq-exporter`
-`metrics.image.tag` | Exporter image tag | `{TAG_NAME}`
-`metrics.image.pullPolicy` | Exporter image pull policy | `IfNotPresent`
-`metrics.serviceMonitor.enabled` | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`
-`metrics.serviceMonitor.namespace` | Namespace where servicemonitor resource should be created | `nil`
-`metrics.serviceMonitor.interval` | Specify the interval at which metrics should be scraped | `30s`
-`metrics.serviceMonitor.scrapeTimeout`| Specify the timeout after which the scrape is ended | `nil`
-`metrics.serviceMonitor.relabellings`| Specify Metric Relabellings to add to the scrape endpoint | `nil`
-`metrics.serviceMonitor.honorLabels` | honorLabels chooses the metric's labels on collisions with target labels. | `false`
-`metrics.serviceMonitor.additionalLabels`| Used to pass Labels that are required by the Installed Prometheus Operator | `{}`
-`metrics.port` | Prometheus metrics exporter port | `9419`
-`metrics.env` | Exporter [configuration environment variables](https://github.com/kbudde/rabbitmq_exporter#configuration) | `{}`
-`metrics.resources` | Exporter resource requests/limit | `nil`
-`metrics.capabilities` | Exporter: Comma-separated list of extended [scraping capabilities supported by the target RabbitMQ server](https://github.com/kbudde/rabbitmq_exporter#extended-rabbitmq-capabilities) | `bert,no_sort`
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| awx_secret_key | string | `"awxsecret"` |  |
+| awx_task.image.pullPolicy | string | `"IfNotPresent"` |  |
+| awx_task.image.repository | string | `"ansible/awx_task"` |  |
+| awx_task.image.tag | string | `"9.1.0"` |  |
+| awx_url_base | string | `"https://towerhost"` |  |
+| awx_web.image.pullPolicy | string | `"IfNotPresent"` |  |
+| awx_web.image.repository | string | `"ansible/awx_web"` |  |
+| awx_web.image.tag | string | `"9.1.0"` |  |
+| default_admin_password | string | `"password"` |  |
+| default_admin_user | string | `"admin"` |  |
+| default_from_email | string | `"webmaster@localhost"` |  |
+| deployment.annotations | object | `{}` |  |
+| email_host | string | `"localhost"` |  |
+| email_host_password | string | `""` |  |
+| email_host_user | string | `""` |  |
+| email_port | int | `25` |  |
+| email_subject_prefix | string | `"[AWX] "` |  |
+| email_use_tls | string | `"False"` |  |
+| fullnameOverride | string | `"awx"` |  |
+| ingress.annotations | object | `{}` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.hosts[0] | string | `"chart-example.local"` |  |
+| ingress.tls | list | `[]` |  |
+| memcached.install | bool | `true` |  |
+| metrics.annotations."prometheus.io/port" | string | `"9090"` |  |
+| metrics.annotations."prometheus.io/scrape" | string | `"true"` |  |
+| metrics.enabled | bool | `false` |  |
+| metrics.port | int | `9419` |  |
+| metrics.serviceMonitor.additionalLabels | object | `{}` |  |
+| metrics.serviceMonitor.enabled | bool | `false` |  |
+| metrics.serviceMonitor.honorLabels | bool | `false` |  |
+| metrics.serviceMonitor.interval | string | `"30s"` |  |
+| nodeSelector | object | `{}` |  |
+| postgresql.image.registry | string | `"docker.io"` |  |
+| postgresql.image.repository | string | `"bitnami/postgresql"` |  |
+| postgresql.image.tag | float | `9.6` |  |
+| postgresql.install | bool | `true` |  |
+| postgresql.metrics.enabled | bool | `false` |  |
+| postgresql.persistence.enabled | bool | `true` |  |
+| postgresql.postgresqlDatabase | string | `"awx"` |  |
+| postgresql.postgresqlPassword | string | `"awx"` |  |
+| postgresql.postgresqlUsername | string | `"postgres"` |  |
+| rabbitmq.install | bool | `true` |  |
+| rabbitmq.rabbitmq.configuration | string | `"## Clustering\ncluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s\ncluster_formation.k8s.host = kubernetes.default.svc.cluster.local\ncluster_formation.node_cleanup.interval = 10\ncluster_formation.node_cleanup.only_log_warning = false\ncluster_partition_handling = autoheal\n## queue master locator\nqueue_master_locator=min-masters\n## enable guest user\nloopback_users.guest = false\n## awx vhost\ndefault_vhost = awx"` |  |
+| rabbitmq.rabbitmq.password | string | `"awx"` |  |
+| rabbitmq.rabbitmq.username | string | `"awx"` |  |
+| replicaCount | int | `1` |  |
+| resources | object | `{}` |  |
+| server_email | string | `"root@localhost"` |  |
+| service.externalPort | int | `8052` |  |
+| service.internalPort | int | `8052` |  |
+| tolerations | list | `[]` |  |
