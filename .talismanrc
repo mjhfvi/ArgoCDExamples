@@ -2,20 +2,12 @@
 # consider pasting the following format in .talismanrc file in the project root
 ---
 fileignoreconfig:
-- filename: postgresql/values-postgresql.yaml
-  checksum: c3fde8b140add02278fdf8e557a4b8222577379553a68589ee1ed45ff4d7a348
 - filename: .secrets.baseline
-  checksum: ee0ac714dc0307d9b8cc202257844869b360598e41efeabb11435fb3d6b7567e
+  checksum: fd00a02fa5bf1024efce4f85d625b2dfc6374d6bf91b022f2fcff968812dfd19
 - filename: repositories/argocd-add-repo.yaml
-  checksum: 6d543f40cac80faa46abdb4b80b6f569f0a8d2c2491da38cd426231ec273048a
-- filename: .gitleaks.toml
-  checksum: 877499965e8a9209b7643b669fd6b835cc95fd5e3ad599aa6e53c09d036a8dbd
-- filename: argocdAutopilot/bootstrap/argo-cd/kustomization.yaml
-  checksum: a85d3022e00b083de4cd840a635fcf59ee9efa500cc8f1d59cb6f2d10dc9e23d
-- filename: argocd/argo-workflows/README.md
-  checksum: 6195fe809fc115b2a345949283fbf864097f0d1789f5eecab4ab273f5398670b
-- filename: postgresql/values.schema.json
-  checksum: cd58fe8a2c27f9d548c33c2ce2ba857d83021a0263538fde9d3ffaa1b94b2368
-- filename: postgresql/README.md
-  checksum: 30491fdaf3f84390fd50fd8f3861b7ce46ca9325f2b9ffd89a472cce63fc09e7
+  checksum: 1a0b3142bf7edf073aa05363a1b7fc8ba9c9d3ef03d61c08ebb8bff89d1ce5fb
+- filename: .gitleaksignore
+  checksum: 370989545e5be31ab69e58651cb73c85ec209f2afe9175acaeba30b433e782bf
+- filename: .yamllint.yml
+  checksum: eab6c893605201011d352c1916d56fee78d3ca647a809efcd0247cf034ea5c73
 version: ""
